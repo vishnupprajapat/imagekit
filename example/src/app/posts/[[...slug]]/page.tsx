@@ -23,7 +23,6 @@ export default async function PostPage({params}: {params: {slug: string[]}}) {
   const post = await client.fetch<PostQueryResult>(postQuery, {
     slug,
   })
-  console.log(post)
   if (!post?._id) {
     return notFound()
   }
