@@ -10,13 +10,13 @@
     "sanity-plugin",
     "media"
   ],
-  "homepage": "https://github.com/yourusername/sanity-plugin-imagekit-plugin#readme",
+  "homepage": "https://github.com/vishnupprajapat/imagekit#readme",
   "bugs": {
-    "url": "https://github.com/yourusername/sanity-plugin-imagekit-plugin/issues"
+    "url": "https://github.com/vishnupprajapat/imagekit/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:yourusername/sanity-plugin-imagekit-plugin.git"
+    "url": "git@github.com:vishnupprajapat/imagekit.git"
   },
   "license": "MIT",
   "author": "Vishnu Prajapat <vishnupprajapat20000@gmail.com>",
