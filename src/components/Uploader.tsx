@@ -376,17 +376,17 @@ export default function Uploader(props: Props) {
     )
   }
 
-  // Upload is in progress
-  if (state.uploadStatus !== null) {
-    const {uploadStatus} = state
-    return (
-      <UploadProgress
-        onCancel={cancelUploadButton.handleClick}
-        progress={uploadStatus.progress}
-        filename={uploadStatus.file?.name || uploadStatus.url}
-      />
-    )
-  }
+  // // Upload is in progress
+  // if (state.uploadStatus !== null) {
+  //   const {uploadStatus} = state
+  //   return (
+  //     <UploadProgress
+  //       onCancel={cancelUploadButton.handleClick}
+  //       progress={uploadStatus.progress}
+  //       filename={uploadStatus.file?.name || uploadStatus.url}
+  //     />
+  //   )
+  // }
 
   // Upload needs configuration
   if (state.stagedUpload !== null) {

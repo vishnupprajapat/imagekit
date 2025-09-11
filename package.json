@@ -61,7 +61,6 @@
     "lodash": "^4.17.21",
     "react-rx": "^4.1.5",
     "rxjs": "^7.8.1",
-    "sanity-plugin-imagekit-plugin": "file:.yalc/sanity-plugin-imagekit-plugin",
     "scroll-into-view-if-needed": "^3.1.0",
     "suspend-react": "^0.1.3",
     "swr": "^2.2.5",

@@ -21,7 +21,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sanity": "^3.74.0",
-    "sanity-plugin-imagekit-plugin": "file:.yalc/sanity-plugin-imagekit-plugin",
+    "sanity-plugin-imagekit-plugin": "^1.0.0",
     "styled-components": "^6.1.14"
   },
   "devDependencies": {

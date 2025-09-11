@@ -7,6 +7,7 @@ import {PatchEvent, set, setIfMissing, useClient} from 'sanity'
 import type {SetDialogState} from '../hooks/useDialogState'
 import {useSecretsDocumentValues} from '../hooks/useSecretsDocumentValues'
 import {cleanImageKitUrl} from '../util/cleanUrl'
+import {generateImageKitAuthParams, validateAuthParams} from '../util/imagekitAuth'
 import {FileInputButton, type FileInputButtonProps} from './FileInputButton'
 
 interface UploadPlaceholderProps {
@@ -42,15 +43,14 @@ export default function UploadPlaceholder(props: UploadPlaceholderProps) {
       )
     }
 
-    // For now, create a simple auth object
-    // In production, this should generate proper authentication tokens
-    const authParams = {
-      signature: 'placeholder_signature',
-      expire: Math.floor(Date.now() / 1000) + 3600, // 1 hour from now
-      token: 'placeholder_token',
+    // Generate authentication parameters using browser-compatible helper
+    const authParams = generateImageKitAuthParams(secrets.publicKey, secrets.privateKey)
+
+    // Validate generated parameters
+    if (!validateAuthParams(authParams)) {
+      throw new Error('Failed to generate valid ImageKit authentication parameters')
     }
 
-    // Authentication parameters generated successfully
     return authParams
   }, [secrets])
 
