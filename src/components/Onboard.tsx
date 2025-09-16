@@ -31,7 +31,7 @@ export default function Onboard(props: OnboardProps) {
           <Flex justify="flex-start" align="center">
             <Grid columns={1} gap={[2, 3, 4, 4]}>
               <Inline paddingY={1}>
-                <div style={{height: '32px'}}>
+                <div style={{height: '32px', marginBottom: '70px'}}>
                   <ImageKitLogo />
                 </div>
               </Inline>

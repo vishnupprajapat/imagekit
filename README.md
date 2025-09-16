@@ -117,29 +117,29 @@ For reference, here's an example `imagekit.videoAsset` document:
   thumbTime: 65.82,
   // Full ImageKit asset data:
   data: {
-  data: {
-    quality: '80',
-    transformation: 'auto',
-    max_resolution: '1080p',
-    aspect_ratio: '16:9',
-    created_at: '1706645034',
-    duration: 25.492133,
-    status: 'ready',
-    width: 1920,
-    height: 1080,
-    size: 15728640,
-    fileType: 'video',
-    url: 'https://ik.imagekit.io/your_id/video.mp4',
-    // Additional ImageKit asset properties
-    fileId: '7ovyI76F92n02H00mWP7lOCZMIU00N4iysDiQDNppX026HY',
-    filePath: '/video.mp4',
-    name: 'video.mp4',
-    videoCodec: 'h264',
-    audioCodec: 'aac',
-    bitRate: 2500,
-    frameRate: 29.97,
+    data: {
+      quality: '80',
+      transformation: 'auto',
+      max_resolution: '1080p',
+      aspect_ratio: '16:9',
+      created_at: '1706645034',
+      duration: 25.492133,
+      status: 'ready',
+      width: 1920,
+      height: 1080,
+      size: 15728640,
+      fileType: 'video',
+      url: 'https://ik.imagekit.io/your_id/video.mp4',
+      // Additional ImageKit asset properties
+      fileId: '7ovyI76F92n02H00mWP7lOCZMIU00N4iysDiQDNppX026HY',
+      filePath: '/video.mp4',
+      name: 'video.mp4',
+      videoCodec: 'h264',
+      audioCodec: 'aac',
+      bitRate: 2500,
+      frameRate: 29.97,
+    },
   },
-}
 }
 ```
 
