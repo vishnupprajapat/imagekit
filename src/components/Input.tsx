@@ -42,7 +42,6 @@ const Input = (props: InputProps) => {
 
   const error = secretDocumentValues.error || assetDocumentValues.error
   if (error) {
-    // TODO: deal with it more gracefully
     throw error
   }
   const isLoading = secretDocumentValues.isLoading || assetDocumentValues.isLoading
