@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/vishnupprajapat/imagekit/compare/v1.0.0...v1.1.0) (2025-09-11)
+
+### Features
+
+- initial release of sanity-plugin-imagekit-plugin ([034b6ab](https://github.com/vishnupprajapat/imagekit/commit/034b6ab0c06c5525a9d938dce4c9b89c2fcd9206))
+
 ## 1.0.0 (2025-09-03)
 
 ### Features
