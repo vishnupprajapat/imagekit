@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-imagekit-plugin",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "An input component that integrates Sanity Studio with ImageKit.io video encoding/hosting service.",
   "keywords": [
     "sanity",

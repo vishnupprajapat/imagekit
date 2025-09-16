@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/vishnupprajapat/imagekit/compare/v1.1.0...v1.1.1) (2025-09-16)
+
+### Bug Fixes
+
+- logo update ([7355ef4](https://github.com/vishnupprajapat/imagekit/commit/7355ef40cfb0d136adb351ecfcc140516fdf808b))
+
 ## [1.1.0](https://github.com/vishnupprajapat/imagekit/compare/v1.0.0...v1.1.0) (2025-09-11)
 
 ### Features
