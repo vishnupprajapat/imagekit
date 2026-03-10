@@ -143,7 +143,8 @@
   "sanityPlugin": {
     "verifyPackage": {
       "srcIndex": false,
-      "sanityV2Json": false
+      "sanityV2Json": false,
+      "eslintImports": false
     }
   }
 }
