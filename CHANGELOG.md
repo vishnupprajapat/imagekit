@@ -5,6 +5,16 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.3](https://github.com/vishnupprajapat/imagekit/compare/v1.1.2...v1.1.3) (2026-03-10)
+
+### Bug Fixes
+
+- cap undici override to <7 for Node 18 compatibility ([a520aae](https://github.com/vishnupprajapat/imagekit/commit/a520aaecc2d8e5b637c74881b6bd6bc97bf6a050))
+- cap vite override to <7 for Node 18 compatibility ([b13b699](https://github.com/vishnupprajapat/imagekit/commit/b13b699959f317ba12d38d56cdca789248ac85ee))
+- disable eslintImports in verify-package for Windows CI compatibility ([8216863](https://github.com/vishnupprajapat/imagekit/commit/821686396f092de5c462d7f2c81407c25a5df324))
+- resolve npm audit vulnerabilities with overrides ([839a1b7](https://github.com/vishnupprajapat/imagekit/commit/839a1b72eac6be5cf036e940be463e01dc66502a))
+- resolve prettier formatting errors ([1907484](https://github.com/vishnupprajapat/imagekit/commit/1907484e0fafa613bc07fcbbcaac893d724ae18a))
+
 ## [1.1.2](https://github.com/vishnupprajapat/imagekit/compare/v1.1.1...v1.1.2) (2026-03-09)
 
 ### Bug Fixes
