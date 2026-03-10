@@ -2,8 +2,10 @@ import {useReducer} from 'react'
 
 import type {Secrets} from '../util/types'
 
-export interface State
-  extends Pick<Secrets, 'publicKey' | 'privateKey' | 'urlEndpoint' | 'enablePrivateImages'> {
+export interface State extends Pick<
+  Secrets,
+  'publicKey' | 'privateKey' | 'urlEndpoint' | 'enablePrivateImages'
+> {
   submitting: boolean
   error: string | null
 }
