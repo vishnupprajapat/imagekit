@@ -70,7 +70,7 @@
   "devDependencies": {
     "@sanity/client": "^6.28.1",
     "@sanity/pkg-utils": "^6.13.4",
-    "@sanity/plugin-kit": "4.0.19",
+    "@sanity/plugin-kit": "^4.0.20",
     "@sanity/semantic-release-preset": "^5.0.0",
     "@sanity/vision": "^3.77.2",
     "@types/crypto-js": "^4.2.2",
@@ -105,6 +105,31 @@
     "react-is": "^18.3 || ^19",
     "sanity": "^3.42.0",
     "styled-components": "^5 || ^6"
+  },
+  "overrides": {
+    "tar": ">=7.5.10",
+    "tar-fs": ">=2.1.4",
+    "form-data": ">=4.0.2",
+    "vite": ">=6.4.1",
+    "serialize-javascript": ">=7.0.4",
+    "undici": ">=6.23.0",
+    "valibot": ">=1.1.1",
+    "axios": ">=1.8.0",
+    "dompurify": ">=3.3.2",
+    "esbuild": ">=0.25.0",
+    "prismjs": ">=1.30.0",
+    "lodash-es": ">=4.17.23",
+    "@babel/runtime": ">=7.28.0",
+    "js-yaml": ">=4.1.1",
+    "@octokit/endpoint": ">=10.1.4",
+    "@octokit/plugin-paginate-rest": ">=11.6.0",
+    "@octokit/request": ">=9.2.4",
+    "@octokit/request-error": ">=6.1.8",
+    "brace-expansion": ">=2.0.2",
+    "glob": ">=10.5.0",
+    "minimatch": ">=9.0.9",
+    "min-document": ">=2.19.2",
+    "diff": ">=5.2.2"
   },
   "engines": {
     "node": ">=18"
