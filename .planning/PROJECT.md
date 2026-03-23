@@ -19,8 +19,11 @@ Provide a seamless, reliable way for Sanity editors to upload and manage ImageKi
 
 ### Active
 
-- [ ] Update README template placeholders with actual repository information
-- [ ] Add an automated testing framework (e.g., Vitest) to run unit/integration tests
+- [ ] Full Architectural Refactor (Clean architecture: `services`, `controllers`)
+- [ ] Security fixes (Zod validation, preventing secret leak)
+- [ ] React components rewrite (`useUploader` custom hook)
+- [ ] Centralized type safety and integration with `ImageKitService` class
+- [ ] Add automated testing framework (Vitest) and fix Documentation
 
 ### Out of Scope
 
@@ -42,6 +45,7 @@ Provide a seamless, reliable way for Sanity editors to upload and manage ImageKi
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Implement Tests | `npm test` currently only lints. Tests are needed for stability. | — Pending |
+| Clean Architecture | Code logic was historically scattered; centralizing it to services will increase testability. | — Pending |
 
 ---
 *Last updated: 2026-03-23 after project initialization*
