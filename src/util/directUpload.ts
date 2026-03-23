@@ -3,7 +3,7 @@
 import {upload as reactUpload} from '@imagekit/react'
 import type {SanityClient} from 'sanity'
 
-import type {ImageKitUploadResponse} from '../clients/imageKitClient'
+import type {ImageKitUploadResponse} from '../types/imagekit'
 import type {ConfiguredSecrets} from '../util/types'
 import {buildCustomMetadata} from './buildCustomMetadata'
 import {fallbackUploadToImageKit} from './fallbackUpload'
@@ -39,6 +39,41 @@ async function fileToBase64(file: File): Promise<string | null> {
   })
 }
 
+let cachedAuth: {token: string; signature: string; expire: number} | null = null
+
+async function getCachedAuth() {
+  if (cachedAuth && Date.now() / 1000 < cachedAuth.expire - 60) {
+    return cachedAuth
+  }
+
+  const authApiResponse = await fetch('/api/imagekit/auth', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!authApiResponse.ok) {
+    throw new Error(
+      `Failed to fetch authentication parameters: ${authApiResponse.status} ${authApiResponse.statusText}`
+    )
+  }
+
+  const authResponse = await authApiResponse.json()
+
+  if (!authResponse.token || !authResponse.signature || !authResponse.expire) {
+    throw new Error('Invalid authentication parameters received from server')
+  }
+
+  cachedAuth = {
+    token: authResponse.token,
+    signature: authResponse.signature,
+    expire: authResponse.expire,
+  }
+
+  return cachedAuth
+}
+
 /**
  * Direct upload function for browser environments using the ImageKit React SDK
  * Uses the Sanity API route for authentication
@@ -67,30 +102,8 @@ export async function directUploadToImageKit(
   // File converted to base64, preparing to upload
 
   try {
-    // Getting authentication parameters from Sanity Studio API route
-
-    // For Studio routes, we need to use fetch API with relative URL
-    // client.request() would try to call the Sanity API, not the Studio route
-    const authApiResponse = await fetch('/api/imagekit/auth', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    if (!authApiResponse.ok) {
-      throw new Error(
-        `Failed to fetch authentication parameters: ${authApiResponse.status} ${authApiResponse.statusText}`
-      )
-    }
-
-    const authResponse = await authApiResponse.json()
-
-    // Authentication parameters received
-
-    if (!authResponse.token || !authResponse.signature || !authResponse.expire) {
-      throw new Error('Invalid authentication parameters received from server')
-    }
+    // Getting authentication parameters from Sanity Studio API route or local cache
+    const authResponse = await getCachedAuth()
 
     const uploadParams: Record<string, unknown> = {
       file: base64Data,
