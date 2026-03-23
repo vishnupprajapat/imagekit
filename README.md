@@ -164,7 +164,7 @@ export default function ImageKitVideo({url, title}: {url?: string; title?: strin
 }
 ```
 
-💡 You can try these recommendations through the [Codesandbox example](https://codesandbox.io/s/github/yourusername/sanity-plugin-imagekit-plugin/tree/main/example).
+💡 You can try these recommendations through the [Codesandbox example](https://codesandbox.io/s/github/vishnupprajapat/imagekit/tree/main/example).
 
 ## Configuring ImageKit Video uploads
 
@@ -254,7 +254,7 @@ Issues are actively monitored and PRs are welcome. When developing this plugin t
 
 ### Publishing
 
-You can run the ["CI and Release" workflow](<[https://github.com/yourusername/sanity-plugin-imagekit-plugin/actions/workflows/ci.yml](https://github.com/yourusername/sanity-plugin-imagekit-plugin/actions/workflows/main.yml)>).
+You can run the ["CI and Release" workflow](https://github.com/vishnupprajapat/imagekit/actions/workflows/main.yml).
 Make sure to select the main branch and check "Release new version".
 
 Semantic release will only release on configured branches, so it is safe to run release on any branch.
@@ -285,7 +285,7 @@ You can run the example locally by doing the following:
 
 ### Release new version
 
-Run ["CI & Release" workflow](https://github.com/yourusername/sanity-plugin-imagekit-plugin/actions/workflows/main.yml).
+Run ["CI & Release" workflow](https://github.com/vishnupprajapat/imagekit/actions/workflows/main.yml).
 Make sure to select the main branch and check "Release new version".
 
 Semantic release will only release on configured branches, so it is safe to run release on any branch.
