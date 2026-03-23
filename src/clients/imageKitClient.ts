@@ -1,81 +1,87 @@
 import ImageKit from 'imagekit'
 import {SanityClient} from 'sanity'
 
+import {ImageKitFileDetails, ImageKitUploadResponse} from '../types/imagekit'
 import {directUploadToImageKit} from '../util/directUpload'
 import {ConfiguredSecrets} from '../util/types'
 
 /**
- * Creates an ImageKit client instance
+ * ImageKit API Service Class
  */
-export function createImageKitClient(secrets: ConfiguredSecrets) {
-  return new ImageKit({
-    publicKey: secrets.publicKey,
-    privateKey: secrets.privateKey,
-    urlEndpoint: secrets.urlEndpoint,
-  })
-}
+export class ImageKitService {
+  private client: typeof ImageKit | any
 
-/**
- * Tests if the provided ImageKit credentials are valid
- */
-export function testImageKitCredentials(
-  client: SanityClient,
-  secrets: ConfiguredSecrets
-): Promise<unknown> {
-  const imagekit = createImageKitClient(secrets)
+  constructor(secrets: ConfiguredSecrets) {
+    if (!secrets.publicKey || !secrets.privateKey || !secrets.urlEndpoint) {
+      throw new Error('Invalid ImageKit credentials')
+    }
 
-  // Test credentials by trying to list files (will throw if credentials are invalid)
-  return imagekit.listFiles({
-    limit: 1,
-  })
-}
+    // Initialize the server-side SDK
+    this.client = new ImageKit({
+      publicKey: secrets.publicKey,
+      privateKey: secrets.privateKey,
+      urlEndpoint: secrets.urlEndpoint,
+    })
+  }
 
-// Define the ImageKit upload response type
-export interface ImageKitUploadResponse {
-  fileId: string
-  name: string
-  url: string
-  thumbnailUrl: string
-  height?: number
-  width?: number
-  size: number
-  filePath: string
-  tags?: string[]
-  isPrivateFile: boolean
-  customCoordinates?: string
-  metadata?: Record<string, unknown>
-  customMetadata?: Record<string, string>
-  fileType?: string
-  mime?: string
-  [key: string]: unknown
-}
+  /**
+   * Tests if the provided ImageKit credentials are valid
+   */
+  async testCredentials(): Promise<unknown> {
+    return this.client.listFiles({
+      limit: 1,
+    })
+  }
 
-// Define the ImageKit file details response type
-export interface ImageKitFileDetails {
-  fileId: string
-  name: string
-  url: string
-  thumbnailUrl?: string
-  height?: number
-  width?: number
-  size: number
-  filePath: string
-  tags?: string[]
-  isPrivateFile: boolean
-  customCoordinates?: string
-  metadata?: Record<string, unknown>
-  customMetadata?: Record<string, string>
-  fileType?: string
-  mime?: string
-  createdAt: string
-  updatedAt: string
-  type: string
-  [key: string]: unknown
+  /**
+   * Gets file details from ImageKit
+   */
+  async getFileDetails(fileId: string): Promise<ImageKitFileDetails> {
+    const details = await this.client.getFileDetails(fileId)
+    return {
+      ...details,
+      tags: details.tags || [],
+      type: details.type || '',
+    } as unknown as ImageKitFileDetails
+  }
+
+  /**
+   * Generates a URL from ImageKit
+   */
+  getUrl(options: any): string {
+    return this.client.url(options)
+  }
+
+  /**
+   * Deletes a file from ImageKit
+   */
+  deleteFile(fileId: string) {
+    return this.client.deleteFile(fileId)
+  }
+
+  /**
+   * Generates authentication parameters
+   */
+  getAuthenticationParameters() {
+    return this.client.getAuthenticationParameters()
+  }
+
+  /**
+   * Gets a list of files from ImageKit
+   */
+  async listFiles(options: Record<string, unknown> = {}): Promise<ImageKitFileDetails[]> {
+    const files = await this.client.listFiles(options)
+    return files.map((file: any) => ({
+      ...file,
+      tags: file.tags || [],
+      type: file.type || '',
+    })) as unknown as ImageKitFileDetails[]
+  }
 }
 
 /**
  * Uploads a file to ImageKit using multi-approach strategy
- * This is the main entry point for all uploads
+ * This is the main entry point for all browser-side uploads
  */
 export async function uploadToImageKit(
   client: SanityClient,
@@ -83,9 +89,6 @@ export async function uploadToImageKit(
   file: File,
   options: Record<string, unknown>
 ): Promise<ImageKitUploadResponse> {
-  // uploadToImageKit called with options
-
-  // Get the necessary credentials
   const {publicKey, privateKey, urlEndpoint} = secrets
 
   if (!publicKey || !privateKey || !urlEndpoint) {
@@ -94,46 +97,8 @@ export async function uploadToImageKit(
 
   // Use the enhanced direct upload function
   try {
-    // Using direct upload approach
     return await directUploadToImageKit(file, client, secrets, options)
   } catch (error) {
-    // Upload failed
     throw new Error(`Upload failed: ${(error as Error)?.message || 'Unknown error'}`)
   }
-}
-
-/**
- * Gets file details from ImageKit
- */
-export async function getFileDetails(
-  client: SanityClient,
-  secrets: ConfiguredSecrets,
-  fileId: string
-): Promise<ImageKitFileDetails> {
-  const imagekit = createImageKitClient(secrets)
-
-  const details = await imagekit.getFileDetails(fileId)
-  return {
-    ...details,
-    tags: details.tags || [],
-    type: details.type || '',
-  } as ImageKitFileDetails
-}
-
-/**
- * Gets a list of files from ImageKit
- */
-export async function listFiles(
-  client: SanityClient,
-  secrets: ConfiguredSecrets,
-  options: Record<string, unknown> = {}
-): Promise<ImageKitFileDetails[]> {
-  const imagekit = createImageKitClient(secrets)
-
-  const files = await imagekit.listFiles(options)
-  return files.map((file) => ({
-    ...file,
-    tags: file.tags || [],
-    type: file.type || '',
-  })) as ImageKitFileDetails[]
 }

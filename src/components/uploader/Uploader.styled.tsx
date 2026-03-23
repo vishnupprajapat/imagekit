@@ -3,7 +3,7 @@ import {Card, type CardTone} from '@sanity/ui'
 import React, {forwardRef, useCallback, useRef} from 'react'
 import {styled} from 'styled-components'
 
-import {withFocusRing} from './withFocusRing'
+import {withFocusRing} from '../withFocusRing'
 
 const ctrlKey = 17
 const cmdKey = 91

@@ -1,6 +1,6 @@
 import type {SanityClient} from 'sanity'
 
-import {getFileDetails} from '../clients/imageKitClient'
+import {ImageKitService} from '../clients/imageKitClient'
 import {formatSeconds} from './formatSeconds'
 import type {ConfiguredSecrets} from './types'
 import {ImageKitVideoMetadata, VideoAssetDocument} from './types'
@@ -32,7 +32,8 @@ export async function getVideoMetadataFromApi(
 ): Promise<ImageKitVideoMetadata | null> {
   try {
     // Get the file details from ImageKit
-    const fileDetails = await getFileDetails(client, secrets, fileId)
+    const imagekitService = new ImageKitService(secrets)
+    const fileDetails = await imagekitService.getFileDetails(fileId)
 
     // Extract video metadata if available
     if (fileDetails && fileDetails.fileType && fileDetails.fileType.startsWith('video')) {

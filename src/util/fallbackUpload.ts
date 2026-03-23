@@ -4,7 +4,7 @@
 import ImageKit from 'imagekit'
 import type {SanityClient} from 'sanity'
 
-import type {ImageKitUploadResponse} from '../clients/imageKitClient'
+import type {ImageKitUploadResponse} from '../types/imagekit'
 import {buildCustomMetadata} from './buildCustomMetadata'
 import type {ConfiguredSecrets} from './types'
 

@@ -12,7 +12,7 @@ import ConfigureApi from './ConfigureApi'
 import ErrorBoundaryCard from './ErrorBoundaryCard'
 import {InputFallback} from './Input.styled'
 import Onboard from './Onboard'
-import Uploader from './Uploader'
+import Uploader from './uploader'
 
 export interface InputProps extends ImageKitInputProps {
   config: PluginConfig

@@ -4,11 +4,11 @@ import {Box, Button, Card, Flex, Inline, Stack, Text} from '@sanity/ui'
 import {useCallback, useState} from 'react'
 import {PatchEvent, set, setIfMissing, useClient} from 'sanity'
 
-import type {SetDialogState} from '../hooks/useDialogState'
-import {useSecretsDocumentValues} from '../hooks/useSecretsDocumentValues'
-import {cleanImageKitUrl} from '../util/cleanUrl'
-import {generateImageKitAuthParams, validateAuthParams} from '../util/imagekitAuth'
-import {FileInputButton, type FileInputButtonProps} from './FileInputButton'
+import type {SetDialogState} from '../../hooks/useDialogState'
+import {useSecretsDocumentValues} from '../../hooks/useSecretsDocumentValues'
+import {cleanImageKitUrl} from '../../util/cleanUrl'
+import {generateImageKitAuthParams, validateAuthParams} from '../../util/imagekitAuth'
+import {FileInputButton, type FileInputButtonProps} from '../FileInputButton'
 
 interface UploadPlaceholderProps {
   setDialogState: SetDialogState
