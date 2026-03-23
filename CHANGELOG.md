@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/vishnupprajapat/imagekit/compare/v1.1.3...v1.2.0) (2026-03-23)
+
+### Features
+
+- **03:** break apart Uploader UI and add hook caching ([2f59543](https://github.com/vishnupprajapat/imagekit/commit/2f59543050c63e1e9e96cf638204cf54abde9c39))
+- **security:** implement zod validation for phase 2 ([6d52314](https://github.com/vishnupprajapat/imagekit/commit/6d52314e64766609f86a6b4666ca427b63a53307))
+
 ## [1.1.3](https://github.com/vishnupprajapat/imagekit/compare/v1.1.2...v1.1.3) (2026-03-10)
 
 ### Bug Fixes
