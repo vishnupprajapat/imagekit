@@ -1,6 +1,6 @@
 import type {SanityClient} from 'sanity'
 
-import {createImageKitClient} from '../clients/imageKitClient'
+import {ImageKitService} from '../clients/imageKitClient'
 import {cleanImageKitUrl} from './cleanUrl'
 import type {AnimatedThumbnailOptions, ConfiguredSecrets} from './types'
 
@@ -58,11 +58,11 @@ export function getAnimatedPosterSrc(
   }
 
   // Get the ImageKit client
-  const imagekit = createImageKitClient(secrets)
+  const imagekitService = new ImageKitService(secrets)
 
   // Generate the URL with transformations
   return cleanImageKitUrl(
-    imagekit.url({
+    imagekitService.getUrl({
       path: `/${fileId}`,
       transformation: transformations,
       signed: isPrivate,

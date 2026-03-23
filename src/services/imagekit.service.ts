@@ -3,8 +3,11 @@ import {concat, defer, type Observable, of, throwError} from 'rxjs'
 import {catchError, map, switchMap} from 'rxjs/operators'
 import type {SanityClient} from 'sanity'
 
-import {type ImageKitUploadResponse} from '../clients/imageKitClient'
+import {testSecretsObservable} from '../actions/secrets'
+import {ImageKitService} from '../clients/imageKitClient'
+import {type ImageKitUploadResponse} from '../types/imagekit'
 import {cleanUrlsInObject} from '../util/cleanUrl'
+import {imageKitSecretsDocumentId} from '../util/constants'
 import {directUploadToImageKit} from '../util/directUpload'
 import type {
   ConfiguredSecrets,
@@ -12,22 +15,58 @@ import type {
   UploadEvent,
   VideoAssetDocument,
 } from '../util/types'
-import {testSecretsObservable} from './secrets'
+import {ImageKitSettingsSchema, UploadUrlSchema} from '../util/validation'
+
+/**
+ * Server-side function for ImageKit authentication
+ * This generates authentication parameters for client-side uploads
+ */
+export async function generateAuth(client: SanityClient) {
+  try {
+    const secretsData = await client.fetch(
+      `*[_id == $secretsId][0]{publicKey, privateKey, urlEndpoint}`,
+      {secretsId: imageKitSecretsDocumentId}
+    )
+
+    const publicKey = secretsData?.publicKey || process.env.IMAGEKIT_PUBLIC_KEY
+    const privateKey = secretsData?.privateKey || process.env.IMAGEKIT_PRIVATE_KEY
+    const urlEndpoint = secretsData?.urlEndpoint || process.env.IMAGEKIT_URL_ENDPOINT
+
+    if (!publicKey || !privateKey) {
+      throw new Error('Missing ImageKit credentials')
+    }
+
+    const secrets: ConfiguredSecrets = {
+      publicKey,
+      privateKey,
+      urlEndpoint: urlEndpoint || '',
+      enablePrivateImages: false,
+    }
+
+    const imagekitService = new ImageKitService(secrets)
+    const authParams = imagekitService.getAuthenticationParameters()
+
+    return {
+      token: authParams.token,
+      expire: authParams.expire,
+      signature: authParams.signature,
+      publicKey,
+    }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    throw new Error(`Failed to generate authentication parameters: ${errorMessage}`)
+  }
+}
 
 export function cancelUpload(client: SanityClient, uuid: string) {
-  // Note: This is a legacy function that may not work with current setup
-  // Consider implementing cancellation through AbortController in upload functions
   return client.observable.request({
-    url: `/api/imagekit/cancel/${uuid}`, // Updated to use plugin route
+    url: `/api/imagekit/cancel/${uuid}`,
     withCredentials: true,
     method: 'DELETE',
   })
 }
 
-// Helper function to create asset document from ImageKit upload result
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createAssetDocument(uuid: string, uploadResult: any): VideoAssetDocument {
-  // Clean URLs to remove updatedAt parameter
   const cleanedResult = cleanUrlsInObject(uploadResult)
 
   return {
@@ -41,15 +80,12 @@ function createAssetDocument(uuid: string, uploadResult: any): VideoAssetDocumen
   }
 }
 
-// Helper function to handle successful upload
 function handleUploadSuccess(uuid: string, result: unknown): UploadEvent {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const uploadResult = result as any
   const document = createAssetDocument(uuid, uploadResult)
   return {type: 'success' as const, id: uuid, asset: document}
 }
 
-// Helper function to handle upload error
 function handleUploadError(err: Error): Observable<never> {
   return throwError(() => new Error(`Upload failed: ${err.message}`))
 }
@@ -63,6 +99,14 @@ export function uploadFile({
   settings: ImageKitNewAssetSettings
   client: SanityClient
 }): Observable<UploadEvent> {
+  try {
+    ImageKitSettingsSchema.parse(settings)
+  } catch (err: any) {
+    return throwError(
+      () => new Error(`Validation Error: ${err.errors?.[0]?.message || err.message}`)
+    )
+  }
+
   return testSecretsObservable(client).pipe(
     switchMap((secretsData) => {
       if (!secretsData || !secretsData.status) {
@@ -78,7 +122,6 @@ export function uploadFile({
 
       const uuid = generateUuid()
 
-      // Prepare upload options with default values
       const uploadOptions: Record<string, string | boolean | string[] | Record<string, string>> = {
         fileName: file.name,
         folder: settings.folder || '/',
@@ -87,28 +130,21 @@ export function uploadFile({
         useUniqueFileName: settings.useUniqueFileName || true,
       }
 
-      // Add custom metadata if available
       if (settings.customMetadata) {
         const customMetadata: Record<string, string> = {}
-
-        // Only include properties that have values
         for (const [key, value] of Object.entries(settings.customMetadata)) {
           if (value !== undefined && value !== null) {
             customMetadata[key] = String(value)
           }
         }
-
-        // Only add if we have metadata
         if (Object.keys(customMetadata).length > 0) {
           uploadOptions.customMetadata = customMetadata
         }
       }
 
-      // Emit initial event with file and uuid
       return of({type: 'file', file, uuid}).pipe(
         switchMap(() =>
           defer(() => {
-            // Starting direct upload to ImageKit with options
             return directUploadToImageKit(file, client, configuredSecrets, uploadOptions)
           }).pipe(
             map((result: unknown) => handleUploadSuccess(uuid, result)),
@@ -120,7 +156,6 @@ export function uploadFile({
   )
 }
 
-// Helper function to fetch URL and convert to File
 async function fetchUrlAsFile(url: string): Promise<File> {
   const response = await fetch(url)
   if (!response.ok) {
@@ -132,7 +167,6 @@ async function fetchUrlAsFile(url: string): Promise<File> {
   })
 }
 
-// Helper function to process URL upload
 function processUrlUpload(
   validUrl: string,
   settings: ImageKitNewAssetSettings,
@@ -155,7 +189,6 @@ function processUrlUpload(
             useUniqueFileName: settings.useUniqueFileName || true,
           }
 
-        // Add custom metadata if available
         if (settings.customMetadata) {
           const customMetadata: Record<string, string> = {}
           for (const [key, value] of Object.entries(settings.customMetadata)) {
@@ -190,6 +223,15 @@ export function uploadUrl({
   settings: ImageKitNewAssetSettings
   client: SanityClient
 }): Observable<UploadEvent> {
+  try {
+    UploadUrlSchema.parse(url)
+    ImageKitSettingsSchema.parse(settings)
+  } catch (err: any) {
+    return throwError(
+      () => new Error(`Validation Error: ${err.errors?.[0]?.message || err.message}`)
+    )
+  }
+
   return testUrl(url).pipe(
     switchMap((validUrl) => {
       return concat(
@@ -233,7 +275,6 @@ function testUrl(url: string): Observable<string> {
   })
 }
 
-// Enhanced upload function with better error handling
 export function enhancedUploadFile({
   file,
   client,
@@ -245,7 +286,6 @@ export function enhancedUploadFile({
   config: ImageKitNewAssetSettings
   onProgress?: (progress: number) => void
 }): Observable<UploadEvent> {
-  // Validate file before upload
   if (!file || file.size === 0) {
     return throwError(() => new Error('Invalid file provided'))
   }
@@ -257,12 +297,11 @@ export function enhancedUploadFile({
   }).pipe(
     map((result) => {
       if (onProgress) {
-        onProgress(100) // Upload completed
+        onProgress(100)
       }
       return result
     }),
     catchError((error) => {
-      // Enhanced error handling for different scenarios
       if (error.message.includes('401') || error.message.includes('unauthorized')) {
         return throwError(
           () => new Error('Invalid ImageKit credentials. Please check your API keys.')
@@ -285,13 +324,11 @@ export function enhancedUploadFile({
         )
       }
 
-      // Generic error fallback
       return throwError(() => new Error(`Upload failed: ${error.message}`))
     })
   )
 }
 
-// Function to check upload limits before attempting upload
 export function checkUploadLimits(
   client: SanityClient
 ): Observable<{canUpload: boolean; reason?: string}> {
@@ -300,8 +337,6 @@ export function checkUploadLimits(
       if (!secretsData || !secretsData.status) {
         return {canUpload: false, reason: 'Invalid credentials'}
       }
-
-      // Additional checks can be added here for quota limits
       return {canUpload: true}
     }),
     catchError((error) => {

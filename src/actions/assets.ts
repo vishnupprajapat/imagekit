@@ -1,6 +1,6 @@
 import type {SanityClient} from 'sanity'
 
-import {getFileDetails} from '../clients/imageKitClient'
+import {ImageKitService} from '../clients/imageKitClient'
 import type {ImageKitAsset, VideoAssetDocument} from '../util/types'
 import {testSecrets} from './secrets'
 
@@ -14,9 +14,8 @@ export async function deleteAssetOnImageKit(
     throw new Error('ImageKit credentials not configured')
   }
 
-  // Import the ImageKit client
-  const {createImageKitClient} = await import('../clients/imageKitClient')
-  const imagekit = createImageKitClient(secrets)
+  // Instantiate the ImageKit service
+  const imagekit = new ImageKitService(secrets)
 
   try {
     // Delete file from ImageKit
@@ -69,7 +68,8 @@ export async function getAsset(client: SanityClient, fileId: string) {
   }
 
   // Get file details from ImageKit
-  const fileDetails = await getFileDetails(client, secrets, fileId)
+  const imagekit = new ImageKitService(secrets)
+  const fileDetails = await imagekit.getFileDetails(fileId)
 
   return {data: fileDetails as unknown as ImageKitAsset}
 }
