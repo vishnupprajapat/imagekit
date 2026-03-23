@@ -31,18 +31,3 @@
 1. At least 3 passing unit tests for the core logic.
 2. Code coverage indicates the core components are tested.
 
----
-
-## Phase 3: Image Assets Support
-**Goal:** Expand the plugin to support another ImageKit type: `image`.
-**Requirements:** FEAT-01, FEAT-02
-**Depends on:** Phase 2
-
-**Plans:**
-- Add `imagekit.image` and `imagekit.imageAsset` schema definitions to `src/schema.ts`.
-- Expand the frontend component to gracefully handle and preview `image` types as well as `video` types.
-- Ensure the plugin configuration accepts defaults suitable for images.
-
-**Success Criteria:**
-1. A new `imagekit.image` schema field type is available for developers using the plugin.
-2. Uploading an Image component triggers ImageKit upload properly and stores an `imagekit.imageAsset` document in Sanity.

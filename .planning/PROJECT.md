@@ -21,11 +21,11 @@ Provide a seamless, reliable way for Sanity editors to upload and manage ImageKi
 
 - [ ] Update README template placeholders with actual repository information
 - [ ] Add an automated testing framework (e.g., Vitest) to run unit/integration tests
-- [ ] Expand plugin support to include ImageKit image assets (`imagekit.image`)
 
 ### Out of Scope
 
 - Complex video editing features inside Sanity — Users should use the ImageKit dashboard for advanced transformations and edits.
+- Image Assets Support (`imagekit.image`) — Explicitly deferred per user request.
 
 ## Context
 
@@ -42,7 +42,6 @@ Provide a seamless, reliable way for Sanity editors to upload and manage ImageKi
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Implement Tests | `npm test` currently only lints. Tests are needed for stability. | — Pending |
-| Expand to Images | Users naturally expect an ImageKit plugin to support images. | — Pending |
 
 ---
 *Last updated: 2026-03-23 after project initialization*

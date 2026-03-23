@@ -8,10 +8,6 @@
 - [ ] **QUAL-01**: Install and configure an automated testing framework (e.g., Vitest).
 - [ ] **QUAL-02**: Write unit tests for the core custom rendering definitions and imagekit data functions to ensure stability.
 
-### Feature Enhancements
-- [ ] **FEAT-01**: Expand the custom schema to support a new `imagekit.image` type, bringing feature parity with the existing `imagekit.video` type.
-- [ ] **FEAT-02**: Extend the plugin configuration to allow defaults specific to image transformations as well as video.
-
 ---
 
 ## v2 Requirements (Deferred)
@@ -20,6 +16,7 @@
 
 ## Out of Scope
 - **Complex Asset Editing in Sanity**: Advanced modifications to assets (cropping, trimming, filtering) are not suitable for the Sanity Studio UI directly and should be managed via ImageKit's dashboard.
+- **Image Assets Support**: Explicitly deferred per user request.
 
 ## Traceability
 <!-- Filled by roadmap -->
