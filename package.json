@@ -147,7 +147,8 @@
     "verifyPackage": {
       "srcIndex": false,
       "sanityV2Json": false,
-      "eslintImports": false
+      "eslintImports": false,
+      "tsc": false
     }
   }
 }
