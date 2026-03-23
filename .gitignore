@@ -70,3 +70,7 @@ dist
 tsconfig.tsbuildinfo
 .next
 .sanity
+
+# GSD Agent directories
+.agent
+.planning
